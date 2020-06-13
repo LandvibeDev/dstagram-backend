@@ -1,1 +1,6 @@
-# dstagram2020
+# Dstagram backend
+
+## How to run
+```bash
+./gradlew bootRun
+```
