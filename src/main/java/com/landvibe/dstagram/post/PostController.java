@@ -34,13 +34,14 @@ public class PostController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Post updatePost(@PathVariable long id, @RequestBody Post post) {
+    public Post updatePost(@PathVariable int id, @RequestBody Post post) {
+        // TODO validate id == post.getId()
         return this.postService.updatePost(id, post);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Post deletePost(@PathVariable long id) {
-        return this.postService.deletePost(id);
+    public void deletePost(@PathVariable int id) {
+        this.postService.deletePost(id);
     }
 }

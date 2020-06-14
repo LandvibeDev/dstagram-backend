@@ -1,22 +1,53 @@
 package com.landvibe.dstagram.post.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "post")
+@Getter
+@Setter
 public class Post {
 
-    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false, nullable = false)
+    private int id;
+
+    @Column
     private String title;
+
+    @Column
     private String contents;
+
+    @Column
     private String imageUrl;
+
+    @Column
     private LocalDateTime created;
+
+    @Column
     private LocalDateTime updated;
+
+    @PrePersist
+    protected void onCreate() {
+        created = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updated = LocalDateTime.now();
+    }
 
     // TODO add user
 
     public Post() {
     }
 
-    public Post(Long id, String title, String contents, String imageUrl, LocalDateTime created, LocalDateTime updated) {
+    public Post(int id, String title, String contents, String imageUrl, LocalDateTime created, LocalDateTime updated) {
         this.id = id;
         this.title = title;
         this.contents = contents;
@@ -24,53 +55,4 @@ public class Post {
         this.created = created;
         this.updated = updated;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
-    }
-
-    public LocalDateTime getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(LocalDateTime updated) {
-        this.updated = updated;
-    }
-
 }
