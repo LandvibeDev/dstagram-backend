@@ -1,47 +1,16 @@
 package com.landvibe.dstagram.post;
 
 import com.landvibe.dstagram.post.model.Post;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class PostService {
+public interface PostService {
 
-    private PostRepository postRepository;
+    List<Post> getPosts();
 
-    public PostService(PostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
+    Post createPost(Post post);
 
-    public List<Post> getPosts() {
-        return this.postRepository.findAll();
-    }
+    Post updatePost(int id, Post post);
 
-    public Post createPost(Post post) {
-        if (this.postRepository.findById(post.getId()).isPresent()) {
-            // TODO make custom exception
-            throw new RuntimeException("This post already exists: " + post.getId());
-        } else {
-            return this.postRepository.save(post);
-        }
-    }
-
-    public Post updatePost(int id, Post post) {
-        if (this.postRepository.findById(id).isPresent()) {
-            return this.postRepository.save(post);
-        } else {
-            // TODO make custom exception
-            throw new RuntimeException("Not found post: " + id);
-        }
-    }
-
-    public void deletePost(int id) {
-        if (this.postRepository.findById(id).isPresent()) {
-            this.postRepository.deleteById(id);
-        } else {
-            // TODO make custom exception
-            throw new RuntimeException("Not found post: " + id);
-        }
-    }
+    void deletePost(int id);
 }
