@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# RUN NGINX
-nginx
-
 # RUN APPLICATION
 java -cp ./:/dstagram/operation/  \
     -Xms1024m -Xmx1024m \
