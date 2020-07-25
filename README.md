@@ -2,7 +2,7 @@
 
 ## How to run
 ```bash
-// Run Database
+# Run Database
 docker run --name mysql-db -p 3306:3306 \
     -e MYSQL_ROOT_PASSWORD=landvibe \
     -e MYSQL_DATABASE=dstagram \
@@ -12,6 +12,6 @@ docker run --name mysql-db -p 3306:3306 \
 ```
 
 ```bash
-// Run Spring
+# Run Spring
 ./gradlew bootRun
 ```
