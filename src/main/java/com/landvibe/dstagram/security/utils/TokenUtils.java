@@ -1,10 +1,7 @@
 package com.landvibe.dstagram.security.utils;
 
 import com.landvibe.dstagram.security.model.AuthUser;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -55,12 +52,12 @@ public class TokenUtils {
         return new SecretKeySpec(apiKeySecretBytes, SignatureAlgorithm.HS256.getJcaName());
     }
 
-    public String getEmailFromToken(String token) {
+    public String getEmailFromToken(String token) throws MalformedJwtException {
         Claims clames = getClaimsFormToken(token);
         return (String) clames.get("email");
     }
 
-    private Claims getClaimsFormToken(String token) {
+    private Claims getClaimsFormToken(String token) throws MalformedJwtException {
         return Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary(secretKey))
                 .parseClaimsJws(token).getBody();
     }

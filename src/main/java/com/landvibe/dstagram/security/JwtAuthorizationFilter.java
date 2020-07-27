@@ -2,7 +2,8 @@ package com.landvibe.dstagram.security;
 
 import com.landvibe.dstagram.security.utils.TokenUtils;
 import com.landvibe.dstagram.user.UserRepository;
-import com.landvibe.dstagram.user.model.DstagramUser;
+import io.jsonwebtoken.MalformedJwtException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,8 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Optional;
 
+@Slf4j
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private TokenUtils tokenUtils;
@@ -51,17 +52,19 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private Authentication getUsernamePasswordAuthentication(String authHeader) {
         String token = authHeader.replace("Bearer", "").trim();
-        String email = tokenUtils.getEmailFromToken(token);
-
-        if (email != null) {
-            Optional<DstagramUser> user = userRepository.findByEmail(email);
-            if (!user.isPresent()) {
+        try {
+            String email = tokenUtils.getEmailFromToken(token);
+            if (email == null) {
                 return null;
             }
 
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user.get(), null, Collections.singleton(new SimpleGrantedAuthority(user.get().getRole())));
-            return auth;
+            return userRepository.findByEmail(email)
+                    .map(user -> new UsernamePasswordAuthenticationToken(user, null, Collections.singleton(new SimpleGrantedAuthority(user.getRole()))))
+                    .orElse(null);
+        } catch (MalformedJwtException e) {
+            log.error("Failed to authenticated: " + token, e);
+            return null;
         }
-        return null;
+
     }
 }
