@@ -36,4 +36,11 @@ public class DstagramUser {
     public AuthUser toAuthUser() {
         return new AuthUser(email, password);
     }
+
+    public static class NullUser extends DstagramUser {
+        public NullUser() {
+            super(0, "--", "--", "ROLE_USER", false);
+        }
+
+    }
 }
