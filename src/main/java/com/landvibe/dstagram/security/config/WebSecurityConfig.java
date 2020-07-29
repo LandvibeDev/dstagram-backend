@@ -36,15 +36,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         // 정적 자원 제외
-        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                .antMatchers("/v2/api-docs/**", "/configuration/ui/**", "/swagger-resources/**",
+                        "/configuration/security/**", "/swagger-ui.html/**", "/swagger/**", "/webjars/**");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers(POST, "/users/sign-up").permitAll()
-                .antMatchers(GET, "/users").permitAll()
+                .antMatchers(POST, "/api/users/sign-up").permitAll()
+                .antMatchers(GET, "/api/users").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -68,7 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public JwtAuthenticationFilter JwtAuthenticationFilter() throws Exception {
         JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager());
-        jwtAuthenticationFilter.setFilterProcessesUrl("/users/login");
+        jwtAuthenticationFilter.setFilterProcessesUrl("/api/users/login");
         jwtAuthenticationFilter.setAuthenticationSuccessHandler(customLoginSuccessHandler());
         jwtAuthenticationFilter.afterPropertiesSet();
         return jwtAuthenticationFilter;
