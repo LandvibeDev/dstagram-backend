@@ -12,7 +12,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/posts")
+@RequestMapping("/api/posts")
 public class PostController {
 
     private PostService postService;
